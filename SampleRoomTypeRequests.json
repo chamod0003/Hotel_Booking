@@ -1,0 +1,126 @@
+{
+  "createRoomType": {
+    "roomTypeName": "Deluxe Ocean View Suite",
+    "pictures": [
+      {
+        "imageUrl": "https://example.com/images/deluxe-ocean-main.jpg",
+        "isMainPicture": true,
+        "displayOrder": 1,
+        "caption": "Main view of Deluxe Ocean View Suite with panoramic windows"
+      },
+      {
+        "imageUrl": "https://example.com/images/deluxe-ocean-bedroom.jpg",
+        "isMainPicture": false,
+        "displayOrder": 2,
+        "caption": "King-size bed with ocean view"
+      },
+      {
+        "imageUrl": "https://example.com/images/deluxe-ocean-bathroom.jpg",
+        "isMainPicture": false,
+        "displayOrder": 3,
+        "caption": "Luxury marble bathroom with rain shower"
+      },
+      {
+        "imageUrl": "https://example.com/images/deluxe-ocean-balcony.jpg",
+        "isMainPicture": false,
+        "displayOrder": 4,
+        "caption": "Private balcony overlooking the ocean"
+      }
+    ]
+  },
+  "updateRoomType": {
+    "roomId": 1,
+    "roomTypeName": "Premium Deluxe Ocean View Suite",
+    "pictures": [
+      {
+        "imageUrl": "https://example.com/images/premium-deluxe-ocean-main.jpg",
+        "isMainPicture": true,
+        "displayOrder": 1,
+        "caption": "Updated main view of Premium Deluxe Ocean View Suite"
+      },
+      {
+        "imageUrl": "https://example.com/images/premium-deluxe-ocean-amenities.jpg",
+        "isMainPicture": false,
+        "displayOrder": 2,
+        "caption": "Premium amenities and workspace area"
+      }
+    ]
+  },
+  "additionalRoomTypeExamples": [
+    {
+      "roomTypeName": "Standard Room",
+      "pictures": [
+        {
+          "imageUrl": "https://example.com/images/standard-room-main.jpg",
+          "isMainPicture": true,
+          "displayOrder": 1,
+          "caption": "Comfortable standard room with modern amenities"
+        },
+        {
+          "imageUrl": "https://example.com/images/standard-room-bathroom.jpg",
+          "isMainPicture": false,
+          "displayOrder": 2,
+          "caption": "Clean bathroom with shower"
+        }
+      ]
+    },
+    {
+      "roomTypeName": "Family Suite",
+      "pictures": [
+        {
+          "imageUrl": "https://example.com/images/family-suite-main.jpg",
+          "isMainPicture": true,
+          "displayOrder": 1,
+          "caption": "Spacious family suite with separate living area"
+        },
+        {
+          "imageUrl": "https://example.com/images/family-suite-bedroom1.jpg",
+          "isMainPicture": false,
+          "displayOrder": 2,
+          "caption": "Master bedroom with queen bed"
+        },
+        {
+          "imageUrl": "https://example.com/images/family-suite-bedroom2.jpg",
+          "isMainPicture": false,
+          "displayOrder": 3,
+          "caption": "Children's room with twin beds"
+        }
+      ]
+    },
+    {
+      "roomTypeName": "Presidential Suite",
+      "pictures": [
+        {
+          "imageUrl": "https://example.com/images/presidential-suite-main.jpg",
+          "isMainPicture": true,
+          "displayOrder": 1,
+          "caption": "Luxurious presidential suite living room"
+        },
+        {
+          "imageUrl": "https://example.com/images/presidential-suite-bedroom.jpg",
+          "isMainPicture": false,
+          "displayOrder": 2,
+          "caption": "King-size bedroom with premium linens"
+        },
+        {
+          "imageUrl": "https://example.com/images/presidential-suite-bathroom.jpg",
+          "isMainPicture": false,
+          "displayOrder": 3,
+          "caption": "Spa-like bathroom with jacuzzi"
+        },
+        {
+          "imageUrl": "https://example.com/images/presidential-suite-dining.jpg",
+          "isMainPicture": false,
+          "displayOrder": 4,
+          "caption": "Private dining area"
+        },
+        {
+          "imageUrl": "https://example.com/images/presidential-suite-terrace.jpg",
+          "isMainPicture": false,
+          "displayOrder": 5,
+          "caption": "Expansive private terrace"
+        }
+      ]
+    }
+  ]
+}
