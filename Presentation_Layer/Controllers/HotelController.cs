@@ -153,10 +153,5 @@ namespace Presentation_Layer.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
-
-
-
-
-
     }
 }

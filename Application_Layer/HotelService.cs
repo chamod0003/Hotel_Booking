@@ -20,13 +20,12 @@ namespace Application_Layer
     
         }
 
-        // ----------------- CREATE HOTEL --------------------
         public async Task<CreateHotelDto> CreateHotelAsync(CreateHotelDto dto)
         {
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
 
-            if (string.IsNullOrWhiteSpace(dto.HotelName))
+            if (string.IsNullOrWhiteSpace(dto.HotelName)) //for unit testing
                 throw new Exception("Hotel Name is required.");
 
             var hotel = new Hotel
