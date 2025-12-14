@@ -1,4 +1,5 @@
-﻿using Application_Layer.DTO;
+﻿using Application_Layer;
+using Application_Layer.DTO;
 using Application_Layer.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,20 @@ namespace Presentation_Layer.Controllers
         {
             var response = await authService.RegisterAsync(registerRequest);
             return Ok(response);
+        }
+
+        [HttpPost("google")]
+        public async Task<ActionResult<AuthResponse>> GoogleLogin([FromBody] GoogleLoginRequest request)
+        {
+            try
+            {
+                var response = await authService.GoogleLoginAsync(request.IdToken);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

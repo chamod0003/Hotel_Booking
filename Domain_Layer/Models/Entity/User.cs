@@ -15,8 +15,7 @@ namespace Domain_Layer.Models.Entity
         [Required]
         public string Email { get; set; }
 
-        [Required]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [Required]
         public string FullName { get; set; }
@@ -24,6 +23,15 @@ namespace Domain_Layer.Models.Entity
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public bool IsActive { get; set; } = true;
+
+        [MaxLength(500)]
+        public string? ProfilePicture { get; set; }
+
+        [MaxLength(50)]
+        public string? OAuthProvider { get; set; } 
+
+        [MaxLength(255)]
+        public string? OAuthId { get; set; }
 
     }
 }

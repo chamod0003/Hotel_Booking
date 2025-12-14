@@ -41,5 +41,15 @@ namespace Application_Layer.DTO
         public Guid UserId { get; set; }
         public string Email { get; set; }
         public string FullName { get; set; }
+
+        public string?ProfilePicture { get; set; }
+
+        public string?OAuthProvider { get; set; }
+    }
+
+    public class GoogleLoginRequest
+    {
+        [Required]
+        public string IdToken { get; set; }
     }
 }

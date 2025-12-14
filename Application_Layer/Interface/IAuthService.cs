@@ -13,5 +13,7 @@ namespace Application_Layer.Interface
 
         Task<AuthResponse> LoginAsync(LoginRequest loginRequest);
 
+        Task<AuthResponse> GoogleLoginAsync(string IdToken);
+
     }
 }
