@@ -19,5 +19,7 @@ namespace Infrastructure_Layer.Data
         public DbSet<HotelRoomPicture> HotelRoomPictures { get; set; }
         public DbSet<HotelAmenity> HotelAmenities { get; set; }
         public DbSet<RoomType> RoomTypes { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }

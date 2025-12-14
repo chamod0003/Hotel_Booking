@@ -42,7 +42,9 @@ namespace Infrastructure_Layer
                             .Include(h => h.Pictures)
                             .Include(h => h.PhoneNumbers)
                             .Include(h => h.Rooms)
+                                .ThenInclude(r => r.Pictures)
                             .Include(h => h.Amenities)
+                                .ThenInclude(a => a.AmenityType)
                             .ToListAsync();
             return result;
         }
@@ -53,7 +55,9 @@ namespace Infrastructure_Layer
                                  .Include(h => h.Pictures)
                                  .Include(h => h.PhoneNumbers)
                                  .Include(h => h.Rooms)
+                                     .ThenInclude(r => r.Pictures)
                                  .Include(h => h.Amenities)
+                                     .ThenInclude(a => a.AmenityType)
                                  .FirstOrDefaultAsync(h => h.HotelId == hotelId);
             return result;
         }
@@ -75,7 +79,9 @@ namespace Infrastructure_Layer
                             .Include(h => h.Pictures)
                             .Include(h => h.PhoneNumbers)
                             .Include(h => h.Rooms)
+                                .ThenInclude(r => r.Pictures)
                             .Include(h => h.Amenities)
+                                .ThenInclude(a => a.AmenityType)
                             .ToListAsync();
             var nearbyHotels = hotels.Where(h =>
             {
@@ -115,7 +121,9 @@ namespace Infrastructure_Layer
                 .Include(h => h.Pictures)
                 .Include(h => h.PhoneNumbers)
                 .Include(h => h.Rooms)
+                    .ThenInclude(r => r.Pictures)
                 .Include(h => h.Amenities)
+                    .ThenInclude(a => a.AmenityType)
                 .Where(h => h.HotelName.Contains(hotelname))
                 .ToListAsync();
             return hotels;
@@ -127,7 +135,9 @@ namespace Infrastructure_Layer
                 .Include(h => h.Pictures)
                 .Include(h => h.PhoneNumbers)
                 .Include(h => h.Rooms)
+                    .ThenInclude(r => r.Pictures)
                 .Include(h => h.Amenities)
+                    .ThenInclude(a => a.AmenityType)
                 .FirstOrDefaultAsync(h => h.HotelId == hotel.HotelId);
             if (existingHotel == null) return null;
 
