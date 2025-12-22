@@ -17,4 +17,17 @@ namespace Application_Layer.DTO
         public decimal TotalOriginalPrice { get; set; }
         public decimal TotalDiscountedPrice { get; set; }
     }
+
+    public class RoomAvailabilityDto
+    {
+        public int HotelId { get; set; }
+        public int RoomTypeId { get; set; }
+        public DateTime CheckInDate { get; set; }
+        public DateTime CheckOutDate { get; set; }
+        public int TotalNights { get; set; }
+        public int RequestedRooms { get; set; }
+        public int AvailableRooms { get; set; }
+        public bool IsAvailable { get; set; }
+        public string Message { get; set; }
+    }
 }

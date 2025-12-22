@@ -38,15 +38,8 @@ namespace Presentation_Layer.Controllers
         [HttpPost("google")]
         public async Task<ActionResult<AuthResponse>> GoogleLogin([FromBody] GoogleLoginRequest request)
         {
-            try
-            {
-                var response = await authService.GoogleLoginAsync(request.IdToken);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var response = await authService.GoogleLoginAsync(request.IdToken);
+            return Ok(response);
         }
     }
 }

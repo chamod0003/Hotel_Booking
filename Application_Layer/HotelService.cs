@@ -2,6 +2,7 @@
 using Application_Layer.Interface;
 using Domain_Layer.Interface;
 using Domain_Layer.Models.Entity;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace Application_Layer
     {
         private readonly IHotelRepository hotelRepository;
 
-        public HotelService(IHotelRepository hotelRepository)
+        private readonly IMemoryCache memoryCache;
+
+        public HotelService(IHotelRepository hotelRepository, IMemoryCache memoryCache)
         {
             this.hotelRepository = hotelRepository;
-    
+            this.memoryCache = memoryCache;
         }
 
         public async Task<CreateHotelDto> CreateHotelAsync(CreateHotelDto dto)
@@ -25,7 +28,7 @@ namespace Application_Layer
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto));
 
-            if (string.IsNullOrWhiteSpace(dto.HotelName)) //for unit testing
+            if (string.IsNullOrWhiteSpace(dto.HotelName))
                 throw new Exception("Hotel Name is required.");
 
             var hotel = new Hotel
@@ -93,8 +96,15 @@ namespace Application_Layer
         // ----------------- GET ALL HOTELS --------------------
         public async Task<IEnumerable<CreateHotelDto>> GetAllHotelsAsync()
         {
+            var cachekey = $"all_hotels";
+
+            if(memoryCache.TryGetValue(cachekey, out IEnumerable<CreateHotelDto> cachedHotels))
+            {
+                return cachedHotels;
+            }
+
             var hotels = await hotelRepository.GetAllAsync();
-            return hotels.Select(h => new CreateHotelDto
+            var hotelsDto= hotels.Select(h => new CreateHotelDto
             {
                 HotelId = h.HotelId,
                 HotelName = h.HotelName,
@@ -145,17 +155,27 @@ namespace Application_Layer
                     AdditionalInfo = a.AdditionalInfo
                 }).ToList() ?? new List<CreateHotelAmenityDto>()
             }).ToList();
+
+            memoryCache.Set(cachekey, hotelsDto, TimeSpan.FromMinutes(10));
+            return hotelsDto;
         }
 
         // ----------------- GET HOTEL BY ID --------------------
         public async Task<CreateHotelDto> GetHotelByIdAsync(int hotelId)
         {
+            var cachekey = $"hotel_{hotelId}";
+
+            if (memoryCache.TryGetValue(cachekey, out CreateHotelDto cachedHotels))
+            {
+                return cachedHotels;
+            }
+
             var hotel = await hotelRepository.GetByIdAsync(hotelId);
 
             if (hotel == null)
                 return null;
 
-            return new CreateHotelDto
+            var hotelDto =  new CreateHotelDto
             {
                 HotelId = hotel.HotelId,
                 HotelName = hotel.HotelName,
@@ -206,6 +226,9 @@ namespace Application_Layer
                     AdditionalInfo = a.AdditionalInfo
                 }).ToList() ?? new List<CreateHotelAmenityDto>()
             };
+
+            memoryCache.Set(cachekey, hotelDto, TimeSpan.FromMinutes(10));
+            return hotelDto;
         }
 
         // ----------------- DELETE HOTEL --------------------

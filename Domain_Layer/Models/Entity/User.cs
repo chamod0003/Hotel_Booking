@@ -33,5 +33,24 @@ namespace Domain_Layer.Models.Entity
         [MaxLength(255)]
         public string? OAuthId { get; set; }
 
+        [Required]
+        [StringLength(100)]
+        public string? PhoneNumber { get; set; }
+
+        [StringLength(500)]
+        public string? Address { get; set; }
+
+        [StringLength(100)]
+        public string? City { get; set; }
+
+        [StringLength(100)]
+        public string? Country { get; set; }
+
+        [StringLength(20)]
+        public string? PostalCode { get; set; }
+
+        public ICollection<Booking> Bookings { get; set; }
+
+
     }
 }
