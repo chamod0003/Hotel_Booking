@@ -42,4 +42,37 @@ namespace Domain_Layer.Models.Entity
         [StringLength(500)]
         public string? Notes { get; set; }
     }
+
+    public class PaymentRequest
+    {
+        public decimal Amount { get; set; }
+        public string Currency { get; set; } = "LKR";
+        public string BookingReference { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerEmail { get; set; }
+        public string CustomerPhone { get; set; }
+
+        // Card details
+        public string CardNumber { get; set; }
+        public string CardHolderName { get; set; }
+        public string ExpiryMonth { get; set; }
+        public string ExpiryYear { get; set; }
+        public string CVV { get; set; }
+
+        // Bank transfer
+        public string BankName { get; set; }
+        public string AccountNumber { get; set; }
+
+        public Dictionary<string, string> Metadata { get; set; }
+    }
+
+    public class PaymentResult
+    {
+        public bool IsSuccess { get; set; }
+        public string TransactionId { get; set; }
+        public string Message { get; set; }
+        public string ErrorCode { get; set; }
+        public DateTime ProcessedAt { get; set; }
+        public Dictionary<string, string> AdditionalData { get; set; }
+    }
 }

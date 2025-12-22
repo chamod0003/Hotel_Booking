@@ -3,6 +3,7 @@ using Application_Layer.Interface;
 using Domain_Layer.Interface;
 using Infrastructure_Layer;
 using Infrastructure_Layer.Data;
+using Infrastructure_Layer.Factory;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -34,8 +35,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<PaymentProcessorFactory>();
 
-// Services
+
 builder.Services.AddScoped<IBookingService, BookingService>();
 
 builder.Services.AddControllers()

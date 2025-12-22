@@ -16,11 +16,17 @@ namespace Application_Layer
         private readonly IHotelRepository hotelRepository;
 
         private readonly IMemoryCache memoryCache;
+        private IHotelRepository @object;
 
         public HotelService(IHotelRepository hotelRepository, IMemoryCache memoryCache)
         {
             this.hotelRepository = hotelRepository;
             this.memoryCache = memoryCache;
+        }
+
+        public HotelService(IHotelRepository @object)
+        {
+            this.@object = @object;
         }
 
         public async Task<CreateHotelDto> CreateHotelAsync(CreateHotelDto dto)
