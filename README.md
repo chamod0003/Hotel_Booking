@@ -90,7 +90,7 @@ Built using **Clean Architecture** with clear separation of concerns:
 
 3. **Apply database migrations**
    ```bash
-   cd Presentation_Layer
+   cd Infrastructure_Layer
    dotnet ef database update
    ```
 
@@ -207,7 +207,7 @@ This is a portfolio project, but suggestions and feedback are welcome!
 **Chamod**
 - GitHub: [@chamod0003](https://github.com/chamod0003)
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - Built as a demonstration of Clean Architecture principles
 - Inspired by real-world hotel booking systems
