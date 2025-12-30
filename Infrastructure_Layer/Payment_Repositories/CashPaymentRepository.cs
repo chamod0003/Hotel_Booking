@@ -14,7 +14,7 @@ namespace Infrastructure_Layer.Payment_Repositories
 
         public async Task<PaymentResult> ProcessPaymentAsync(PaymentRequest request)
         {
-            Console.WriteLine($"💵 Processing Cash Payment: LKR {request.Amount}");
+            Console.WriteLine($" Processing Cash Payment: LKR {request.Amount}");
             await Task.Delay(500);
 
             var transactionId = $"CASH-{DateTime.Now:yyyyMMddHHmmss}-{new Random().Next(1000, 9999)}";

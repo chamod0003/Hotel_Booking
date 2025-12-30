@@ -54,7 +54,8 @@ namespace Application_Layer
                         OAuthId = payload.Subject,
                         CreatedAt = DateTime.UtcNow,
                         IsActive = true,
-                        Password = null  
+                        Password = null,
+                        PhoneNumber = string.Empty
                     };
 
                     _context.Users.Add(user);
@@ -121,7 +122,8 @@ namespace Application_Layer
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true,
                 OAuthProvider = null,  // Regular email/password user
-                OAuthId = null
+                OAuthId = null,
+                PhoneNumber = string.Empty
             };
 
             _context.Users.Add(user);

@@ -2,6 +2,8 @@
 using Application_Layer.DTO;
 using Domain_Layer.Interface;
 using Domain_Layer.Models.Entity;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace TestProject
@@ -13,7 +15,9 @@ namespace TestProject
         public async Task CreateHotelAsync_NullDto_ThrowsArgumentNullException()
         {
             var repomock = new Mock<IHotelRepository>();
-            var service = new HotelService(repomock.Object);
+            var cacheMock = new Mock<IMemoryCache>();
+            var loggerMock = new Mock<ILogger<HotelService>>();
+            var service = new HotelService(repomock.Object, cacheMock.Object, loggerMock.Object);
 
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
             {
@@ -26,7 +30,9 @@ namespace TestProject
         {
             // Arrange
             var repomock = new Mock<IHotelRepository>();
-            var service = new HotelService(repomock.Object);
+            var cacheMock = new Mock<IMemoryCache>();
+            var loggerMock = new Mock<ILogger<HotelService>>();
+            var service = new HotelService(repomock.Object, cacheMock.Object, loggerMock.Object);
             var dto = new CreateHotelDto
             {
                 HotelName = "",
@@ -37,26 +43,79 @@ namespace TestProject
                 BriefDescription = "A nice hotel",
             };
 
-            // Act & Assert
+            // Act 
 
             var exception = await Assert.ThrowsAsync<Exception>(async () =>
             {
                 await service.CreateHotelAsync(dto);
             });
 
+            //Assert
+
             Assert.Equal("Hotel Name is required.", exception.Message);
         }
+
+        [Fact]
+        public async Task CreateHotelAsync_ValidDto_CallsAddAsyncOnce()
+        {
+            var repoMock = new Mock<IHotelRepository>();
+            var cacheMock = new Mock<IMemoryCache>();
+            var loggerMock = new Mock<ILogger<HotelService>>();
+            var service = new HotelService(repoMock.Object, cacheMock.Object, loggerMock.Object);
+
+            repoMock.Setup(r => r.AddAsync(It.IsAny<Hotel>()))
+                    .ReturnsAsync((Hotel h) =>
+                    {
+                        h.HotelId = 10;
+                        return h;
+                    });
+
+         
+
+            var dto = new CreateHotelDto
+            {
+                HotelName = "Test Hotel"
+            };
+
+            var result = await service.CreateHotelAsync(dto);
+
+            repoMock.Verify(r => r.AddAsync(It.IsAny<Hotel>()), Times.Once);
+            Assert.Equal(10, result.HotelId);
+        }
+
+
+        [Fact]
+
+        public async Task CreateHotelAsync_InvalidDto_DoesNotCallRepository()
+        {
+            var repomock = new Mock<IHotelRepository>();
+            var cacheMock = new Mock<IMemoryCache>();
+            var loggerMock = new Mock<ILogger<HotelService>>();
+            var service = new HotelService(repomock.Object, cacheMock.Object, loggerMock.Object);
+
+            await Assert.ThrowsAsync<Exception>(()=>
+                service.CreateHotelAsync(new CreateHotelDto())
+            );
+
+            repomock.Verify(r => r.AddAsync(It.IsAny<Hotel>()), Times.Never);
+        }
+
+
+
 
         [Fact]
         public async Task GetAllHotelsAsync_NoHotels_ReturnEmptyList()
         {
             var repomock = new Mock<IHotelRepository>();
+            var cacheMock = new Mock<IMemoryCache>();
+            var loggerMock = new Mock<ILogger<HotelService>>();
+            var service = new HotelService(repomock.Object, cacheMock.Object, loggerMock.Object);
 
             repomock
                 .Setup(r=>r.GetAllAsync())
                 .ReturnsAsync(new List<Hotel>());
 
-            var service = new HotelService(repomock.Object);
+           
 
             var result = await service.GetAllHotelsAsync();
 
@@ -64,42 +123,7 @@ namespace TestProject
             Assert.NotNull(result);
         }
 
-        [Fact]
-
-        public async Task CreateHotelAsync_ValidDto_CallsAddAsyncOnce()
-        {
-            //Arrange
-
-            var remomock = new Mock<IHotelRepository>();
-
-            remomock
-                .Setup(r => r.AddAsync(It.IsAny<Hotel>()))
-                .ReturnsAsync((Hotel h) =>
-                     {
-                        h.HotelId = 10;  
-                        return h;
-                  })                
-                .Callback<Hotel>(h => h.HotelId = 10);
-
-
-            var service = new HotelService(remomock.Object);
-
-            var dto = new CreateHotelDto
-            {
-                HotelName = "Test Hotel",
-                Latitude = 6.9m,
-                Longitude = 79.8m,
-            };
-
-            //Act
-
-            var result = await service.CreateHotelAsync(dto);
-
-            //Assert
-
-            remomock.Verify(r => r.AddAsync(It.IsAny<Hotel>()), Times.Once);
-            Assert.Equal(10, result.HotelId);
-        }
+        
 
     }
 }

@@ -1,8 +1,6 @@
-﻿using Application_Layer;
-using Application_Layer.DTO;
+﻿using Application_Layer.DTO;
 using Application_Layer.Interface;
 using Domain_Layer.Interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation_Layer.Controllers
@@ -12,12 +10,23 @@ namespace Presentation_Layer.Controllers
     public class BookingController : ControllerBase
     {
         private readonly IBookingService bookingService;
+        private readonly IBookingRepository bookingRepository; 
+        private readonly IBookingSubject bookingSubject; 
+        private readonly ILogger<BookingController> logger;
 
-        public BookingController(IBookingService bookingService)
+        public BookingController(
+            IBookingService bookingService,
+            IBookingRepository bookingRepository, 
+            IBookingSubject bookingSubject, 
+            ILogger<BookingController> logger) 
         {
             this.bookingService = bookingService;
+            this.bookingRepository = bookingRepository; 
+            this.bookingSubject = bookingSubject;
+            this.logger = logger; 
         }
 
+  
         [HttpPost]
         public async Task<IActionResult> CreateBooking([FromBody] CreateBookingDto dto)
         {
@@ -26,11 +35,20 @@ namespace Presentation_Layer.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
+                logger.LogInformation($" Creating booking for user {dto.UserId}");
                 var booking = await bookingService.CreateBookingAsync(dto);
+                var bookingWithDetails = await bookingRepository.GetByIdBookingAsync(booking.BookingId);
+
+           
+                logger.LogInformation($" Notifying observers about new booking {booking.BookingReference}");
+                await bookingSubject.NotifyBookingCreatedAsync(bookingWithDetails);
+                logger.LogInformation($" Observers notified successfully");
+
                 return CreatedAtAction(nameof(GetBookingById), new { id = booking.BookingId }, booking);
             }
             catch (Exception ex)
             {
+                logger.LogError($" Booking creation failed: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -108,34 +126,60 @@ namespace Presentation_Layer.Controllers
             }
         }
 
+
         [HttpPost("{id}/confirm")]
         public async Task<IActionResult> ConfirmBooking(int id)
         {
             try
             {
                 var result = await bookingService.ConfirmBookingAsync(id);
+
                 if (result)
+                {
+                    var bookingWithDetails = await bookingRepository.GetByIdBookingAsync(id);
+
+                    logger.LogInformation($" Notifying observers: Booking confirmed - {bookingWithDetails.BookingReference}");
+                    await bookingSubject.NotifyBookingConfirmedAsync(bookingWithDetails);
+
                     return Ok(new { message = "Booking confirmed successfully" });
+                }
+
                 return BadRequest(new { message = "Failed to confirm booking" });
             }
             catch (Exception ex)
             {
+                logger.LogError($"Booking confirmation failed: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
         }
 
+   
         [HttpPost("{id}/cancel")]
         public async Task<IActionResult> CancelBooking(int id, [FromBody] CancelBookingRequest request)
         {
             try
             {
+                // Get booking before cancellation for email
+                var bookingWithDetails = await bookingRepository.GetByIdBookingAsync(id);
+
                 var result = await bookingService.CancelBookingAsync(id, request.Reason);
+
                 if (result)
+                {
+                    // Refresh booking to get updated cancellation details
+                    bookingWithDetails = await bookingRepository.GetByIdBookingAsync(id);
+
+                    logger.LogInformation($" Notifying observers: Booking cancelled - {bookingWithDetails.BookingReference}");
+                    await bookingSubject.NotifyBookingCancelledAsync(bookingWithDetails);
+
                     return Ok(new { message = "Booking cancelled successfully" });
+                }
+
                 return BadRequest(new { message = "Failed to cancel booking" });
             }
             catch (Exception ex)
             {
+                logger.LogError($" Booking cancellation failed: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -158,15 +202,14 @@ namespace Presentation_Layer.Controllers
 
         [HttpGet("check-availability")]
         public async Task<ActionResult<RoomAvailabilityDto>> CheckRoomAvailability(
-    [FromQuery] int hotelId,
-    [FromQuery] int roomTypeId,
-    [FromQuery] DateTime checkInDate,
-    [FromQuery] DateTime checkOutDate,
-    [FromQuery] int roomsNeeded = 1)
+            [FromQuery] int hotelId,
+            [FromQuery] int roomTypeId,
+            [FromQuery] DateTime checkInDate,
+            [FromQuery] DateTime checkOutDate,
+            [FromQuery] int roomsNeeded = 1)
         {
             try
             {
-                // Get available count
                 var availableCount = await bookingService.GetAvailableRoomsAsync(
                     hotelId, roomTypeId, checkInDate, checkOutDate);
 
@@ -184,8 +227,8 @@ namespace Presentation_Layer.Controllers
                     AvailableRooms = availableCount,
                     IsAvailable = isAvailable,
                     Message = isAvailable
-                        ? $"✅ {availableCount} room(s) available"
-                        : $"❌ Only {availableCount} room(s) available. You requested {roomsNeeded}."
+                        ? $" {availableCount} room(s) available"
+                        : $" Only {availableCount} room(s) available. You requested {roomsNeeded}."
                 });
             }
             catch (Exception ex)

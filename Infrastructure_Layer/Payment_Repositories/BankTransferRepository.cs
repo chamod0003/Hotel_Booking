@@ -14,7 +14,7 @@ namespace Infrastructure_Layer.Payment_Repositories
 
         public async Task<PaymentResult> ProcessPaymentAsync(PaymentRequest request)
         {
-            Console.WriteLine($"🏦 Processing Bank Transfer: LKR {request.Amount}");
+            Console.WriteLine($" Processing Bank Transfer: LKR {request.Amount}");
             await Task.Delay(1000);
 
             var transactionId = $"BT-{DateTime.Now:yyyyMMddHHmmss}-{new Random().Next(1000, 9999)}";

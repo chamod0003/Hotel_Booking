@@ -17,8 +17,11 @@ namespace Application_Layer
 
         private readonly IMemoryCache memoryCache;
 
-        public BookingService(IBookingRepository bookingRepository,IUserRepository userRepository,IHotelRepository hotelRepository,IMemoryCache memoryCache)
+        private readonly IBookingSubject bookingSubject;
+
+        public BookingService(IBookingSubject bookingSubject,IBookingRepository bookingRepository,IUserRepository userRepository,IHotelRepository hotelRepository,IMemoryCache memoryCache)
         {
+            this.bookingSubject = bookingSubject;
             this.bookingRepository = bookingRepository;
             this.userRepository = userRepository;
             this.hotelRepository = hotelRepository;

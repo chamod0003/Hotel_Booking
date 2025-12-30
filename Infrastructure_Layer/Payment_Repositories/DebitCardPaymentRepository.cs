@@ -1,10 +1,5 @@
 ﻿using Domain_Layer.Interface;
 using Domain_Layer.Models.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure_Layer.Payment_Repositories
 {
@@ -14,7 +9,7 @@ namespace Infrastructure_Layer.Payment_Repositories
 
         public async Task<PaymentResult> ProcessPaymentAsync(PaymentRequest request)
         {
-            Console.WriteLine($"💳 Processing Debit Card Payment: LKR {request.Amount}");
+            Console.WriteLine($" Processing Debit Card Payment: LKR {request.Amount}");
 
 
             var transactionId = $"DC-{DateTime.Now:yyyyMMddHHmmss}-{new Random().Next(1000, 9999)}";

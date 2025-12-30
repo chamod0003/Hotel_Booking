@@ -43,7 +43,6 @@ namespace Application_Layer.DTO
 
         public class CreateHotelRoomDto
         {
-            // Use the RoomType id instead of the full RoomType object to simplify JSON binding
             public int RoomTypeId { get; set; }
             public int TotalRooms { get; set; }
             public decimal PricePerNight { get; set; }
@@ -67,7 +66,6 @@ namespace Application_Layer.DTO
 
         public class CreateHotelAmenityDto
         {
-            // Use AmenityType id instead of full AmenityType object to simplify JSON binding
             public int AmenityTypeId { get; set; }
             public bool IsAvailable { get; set; }
             public string AdditionalInfo { get; set; }

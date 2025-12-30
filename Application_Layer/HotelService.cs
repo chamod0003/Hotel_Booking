@@ -3,6 +3,7 @@ using Application_Layer.Interface;
 using Domain_Layer.Interface;
 using Domain_Layer.Models.Entity;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,18 +17,17 @@ namespace Application_Layer
         private readonly IHotelRepository hotelRepository;
 
         private readonly IMemoryCache memoryCache;
-        private IHotelRepository @object;
 
-        public HotelService(IHotelRepository hotelRepository, IMemoryCache memoryCache)
+        private readonly ILogger<HotelService> logger;
+
+
+        public HotelService(IHotelRepository hotelRepository, IMemoryCache memoryCache, ILogger<HotelService> logger)
         {
             this.hotelRepository = hotelRepository;
             this.memoryCache = memoryCache;
+            this.logger = logger;
         }
 
-        public HotelService(IHotelRepository @object)
-        {
-            this.@object = @object;
-        }
 
         public async Task<CreateHotelDto> CreateHotelAsync(CreateHotelDto dto)
         {

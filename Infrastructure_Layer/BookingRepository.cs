@@ -90,7 +90,7 @@ namespace Infrastructure_Layer
             // 3. Available = Total - Booked
             var available = totalRooms - bookedRooms;
 
-            Console.WriteLine($"📊 Hotel:{hotelId} Room:{roomTypeId} | Total:{totalRooms} Booked:{bookedRooms} Available:{available}");
+            Console.WriteLine($" Hotel:{hotelId} Room:{roomTypeId} | Total:{totalRooms} Booked:{bookedRooms} Available:{available}");
 
             return available;
         }
