@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Hotel_Booking.sln
+/OPTIMISTIC_LOCKING_IMPLEMENTATION.md
+/QUICK_REFERENCE_OPTIMISTIC_LOCKING.md
